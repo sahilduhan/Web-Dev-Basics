@@ -7,8 +7,13 @@ router.get('/', (req, res, next) => {
     })
 })
 router.post('/', (req, res, next) => {
+    const products = {
+        name: req.body.name,
+        prices: req.body.prices
+    }
     res.status(201).json({
-        message: 'Handling post requests to ./products'
+        message: 'Handling post requests to ./products',
+        createdProduct: products
     })
 })
 router.get('/:productID', (req, res, next) => {
