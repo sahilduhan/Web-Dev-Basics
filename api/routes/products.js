@@ -6,6 +6,7 @@ router.get('/', (req, res, next) => {
         message: 'Handling get requests to ./products'
     })
 })
+
 router.post('/', (req, res, next) => {
     const products = {
         name: req.body.name,
@@ -16,6 +17,7 @@ router.post('/', (req, res, next) => {
         createdProduct: products
     })
 })
+
 router.get('/:productID', (req, res, next) => {
     const id = req.params.productID;
     if (id == 'special') {
