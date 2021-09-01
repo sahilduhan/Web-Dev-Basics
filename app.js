@@ -23,4 +23,16 @@ app.use((error, req, res, next) => {
     })
 })
 
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origins", "*");
+
+    res.header("Access-Control-Allow-Headers", "Origin, X-requested with, content-type, accept, authorisation")
+
+    if (req.method === "OPTIONS") {
+        res.header("Access-Control-Allow-Methods", 'POST, PUT, POST, DELETE')
+        return res.status(200).json({});
+    }
+    next();
+});
+
 module.exports = app;
