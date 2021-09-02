@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const productSchem = mongoose.Schema({
 
-    _Id = mongoose.types.objectId,
-    name: string,
-    price: number
+    _id: mongoose.Schema.Types.ObjectId,
+    name: String,
+    price: Number
 })
+module.exports = mongoose.model('Product', productSchem);
