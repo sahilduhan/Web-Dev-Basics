@@ -4,8 +4,6 @@ const morgan = require('morgan');
 const app = express();
 app.use(morgan('dev'));
 
-const mongoose = require('mongoose');
-
 // route definitions
 app.use('/products', require('./api/routes/products'));
 app.use('/orders', require('./api/routes/orders'));
