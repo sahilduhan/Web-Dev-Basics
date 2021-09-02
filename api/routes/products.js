@@ -4,9 +4,16 @@ const mongoose = require('mongoose');
 const Product = require('../models/product');
 
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling get requests to ./products'
-    })
+    Product.find()
+        .exec()
+        .then(docs => {
+            console.log(docs), res.status(200).json(docs);
+        }).
+    catch((err) => {
+        console.log(err), res.status(404).json({
+            error: err
+        });
+    });
 })
 
 router.post('/', (req, res, next) => {
@@ -20,31 +27,29 @@ router.post('/', (req, res, next) => {
         prices: req.body.prices
     })
     product.save().then(result => {
-            console.log(result);
+        console.log(result);
+        res.status(201).json({
+            message: 'Handling post requests to ./products',
+            createdProduct: products
         })
-        .catch(err => {
-            console.error(err);
+    }).catch(err => {
+        console.error(err);
+        res.status(500).json({ error: err })
 
-        })
-    res.status(201).json({
-        message: 'Handling post requests to ./products',
-        createdProduct: products
     })
 })
 
 router.get('/:productID', (req, res, next) => {
     const id = req.params.productID;
-    if (id == 'special') {
-        res.status(200).json({
-            message: 'You Discovered something special',
-            id: id
-        })
-    } else {
-        res.status(200).json({
-            message: 'You passed an id'
-        })
-    }
-
+    Product.findById(id).exec().then((doc) => {
+        console.log(doc => {
+            console.log("Recieved from database", doc);
+        });
+        if (doc) res.status(200).json(doc);
+        else res.status(404).json({ message: "No valid entery" })
+    }).catch((err) => {
+        console.error(err), res.status(500).json({ error: err });
+    })
 })
 
 router.patch('/:productID', (req, res, next) => {
