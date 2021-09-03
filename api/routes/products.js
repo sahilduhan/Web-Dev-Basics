@@ -17,25 +17,16 @@ router.get('/', (req, res, next) => {
 })
 
 router.post('/', (req, res, next) => {
-    const products = {
-        name: req.body.name,
-        prices: req.body.prices
-    }
-    const product = Product({
-        _id: new mongoose.Types.ObjectId(),
-        name: req.body.name,
-        prices: req.body.prices
-    })
+    const _product = req.body;
+    const product = Product(
+
+    )
+
     product.save().then(result => {
-        console.log(result);
-        res.status(201).json({
-            message: 'Handling post requests to ./products',
-            createdProduct: products
-        })
+        res.status(201).json(result);
     }).catch(err => {
         console.error(err);
         res.status(500).json({ error: err })
-
     })
 })
 
@@ -43,7 +34,7 @@ router.get('/:productID', (req, res, next) => {
     const id = req.params.productID;
     Product.findById(id).exec().then((doc) => {
         console.log(doc => {
-            console.log("Recieved from database", doc);
+            // console.log("Recieved from database", doc);
         });
         if (doc) res.status(200).json(doc);
         else res.status(404).json({ message: "No valid entery" })
@@ -53,15 +44,30 @@ router.get('/:productID', (req, res, next) => {
 })
 
 router.patch('/:productID', (req, res, next) => {
-    res.status(200).json({
-        message: 'Product updated'
+    const id = req.params.productID;
+    const updateOps = {};
+    for (const ops of req.body) updateOps[ops.propName] = ops.value;
+    Product.update({ id: id }, { $set: updateOps }).exec(), then(result => {
+        res.status(200).json(result);
+    }).catch(err => {
+        error: err;
     })
 })
 
 router.delete('/:productID', (req, res, next) => {
-    res.status(200).json({
-        message: 'Product deleted!'
-    })
+    const id = req.params.productID;
+    Product.remove({
+            _id: id
+        }).exec()
+        .then((result) => {
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            res.status(404).json({
+                error: err,
+                message: 'Product not found in the database'
+            })
+        })
 })
 
 

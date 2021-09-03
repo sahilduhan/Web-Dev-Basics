@@ -3,8 +3,10 @@ const morgan = require('morgan');
 
 const app = express();
 app.use(morgan('dev'));
+app.use(express.json());
 
 // route definitions
+
 app.use('/products', require('./api/routes/products'));
 app.use('/orders', require('./api/routes/orders'));
 
