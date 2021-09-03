@@ -18,12 +18,19 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
     const _product = req.body;
-    const product = Product(
-
-    )
-
+    const product = Product()
     product.save().then(result => {
-        res.status(201).json(result);
+        res.status(201).json({
+            message: 'Product created successfully',
+            creaedProduct: {
+                name: result.name,
+                price: result.price,
+                _id: result.id,
+                request: {
+                    URL: 'http://localhost:3000/products' + result.id
+                }
+            }
+        });
     }).catch(err => {
         console.error(err);
         res.status(500).json({ error: err })
@@ -32,7 +39,7 @@ router.post('/', (req, res, next) => {
 
 router.get('/:productID', (req, res, next) => {
     const id = req.params.productID;
-    Product.findById(id).exec().then((doc) => {
+    Product.select('name price id').findById(id).exec().then((doc) => {
         console.log(doc => {
             // console.log("Recieved from database", doc);
         });
