@@ -10,7 +10,6 @@ router.post('/', (req, res, next) => {
             quantity: req.body.quantity,
             product: req.body.productID
         }).save()
-        .exec()
         .then(result => { res.status(200).json(result); })
         .catch((err) => {
             res.status(300).json({
