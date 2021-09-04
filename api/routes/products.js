@@ -3,6 +3,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Product = require('../models/product');
 const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
 
 router.get('/', (req, res, next) => {
     Product.find()
@@ -17,9 +19,10 @@ router.get('/', (req, res, next) => {
     });
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('ProductImage'), (req, res, next) => {
+    // console.log(req.file);
     const _product = req.body;
-    const product = Product()
+    const product = Product(_product)
     product.save().then(result => {
         res.status(201).json({
             message: 'Product created successfully',
@@ -59,6 +62,7 @@ router.patch('/:productID', (req, res, next) => {
         error: err;
     })
 })
+
 
 router.delete('/:productID', (req, res, next) => {
     const id = req.params.productID;
