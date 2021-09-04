@@ -7,9 +7,7 @@ const productSchem = mongoose.Schema({
     },
     price: {
         type: Number,
-        required: [true, 'Price is mandatory'],
-        min: 0,
-        max: 9999,
+        required: [true, 'Price is mandatory']
     }
 })
 
