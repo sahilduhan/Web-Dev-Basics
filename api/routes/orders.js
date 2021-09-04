@@ -15,6 +15,7 @@ router.get('/', (req, res, next) => {
         })
 })
 
+
 router.post('/', (req, res, next) => {
     Product.findById(req.body.productID)
         .then(Product => {
@@ -37,10 +38,12 @@ router.post('/', (req, res, next) => {
         });
 });
 
+
 router.get('/:ordersId', (req, res, next) => {
     Order.findById(req.params.ordersId)
         .exec()
         .then(orders => {
+            if (!orders) res.status(404).json({ message: 'products not found' })
             res.status(200).json({
                 orders: orders
             })
@@ -50,11 +53,15 @@ router.get('/:ordersId', (req, res, next) => {
         })
 })
 
+
 router.delete('/:ordersId', (req, res, next) => {
-
-
+    Order.remove({ id: req.params.ordersId })
+        .exec()
+        .then(result => { message: 'order deleted' })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        })
 })
-
 
 
 module.exports = router;
