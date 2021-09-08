@@ -11,7 +11,13 @@ const diskStorage = multer.diskStorage({
         cb(null, new Date().toISOString() + file.filename)
     }
 })
-const upload = multer({ storage: diskStorage });
+const upload = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 1024 * 1024 * 5
+    }
+});
+
 
 
 
@@ -28,6 +34,7 @@ router.get('/', (req, res, next) => {
 router.post('/', upload.single('ProductImage'), (req, res, next) => {
     // console.log(req.file);
     const _product = req.body;
+    productImage: req.file.path;
     const product = Product(_product)
     product.save().then(result => {
         res.status(201).json({
